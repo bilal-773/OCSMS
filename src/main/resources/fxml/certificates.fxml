@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.ocsms.gui.controllers.CertificateController"
+      spacing="20">
+
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <Label text="🎓  My Certificates" style="-fx-text-fill: #f1f5f9; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+    </HBox>
+    <Label text="Certificates you have earned by attending society events." style="-fx-text-fill: #475569; -fx-font-size: 13px;"/>
+
+    <!-- Stats -->
+    <HBox spacing="16">
+        <VBox HBox.hgrow="ALWAYS" spacing="4"
+              style="-fx-background-color: #0d1433; -fx-background-radius: 10; -fx-border-color: #1e2a4a; -fx-border-width: 1; -fx-border-radius: 10;">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+            <Label text="Total Certificates" style="-fx-text-fill: #475569; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="totalCertsLabel" text="0"
+                   style="-fx-text-fill: #fbbf24; -fx-font-size: 30px; -fx-font-weight: bold;"/>
+        </VBox>
+        <VBox HBox.hgrow="ALWAYS" spacing="4"
+              style="-fx-background-color: #0d1433; -fx-background-radius: 10; -fx-border-color: #1e2a4a; -fx-border-width: 1; -fx-border-radius: 10;">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+            <Label text="Verify a Certificate" style="-fx-text-fill: #475569; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <TextField fx:id="verifyCodeField" promptText="Enter verification code (e.g. A1B2C3D4)"
+                           HBox.hgrow="ALWAYS"
+                           style="-fx-background-color: #111827; -fx-text-fill: #f1f5f9;
+                                  -fx-prompt-text-fill: #374151; -fx-border-color: #1e2a4a;
+                                  -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8;
+                                  -fx-padding: 8 12; -fx-font-size: 12px;"/>
+                <Button text="Verify" onAction="#handleVerify"
+                        style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-font-weight: bold;
+                               -fx-padding: 8 16; -fx-background-radius: 7; -fx-cursor: hand;"/>
+            </HBox>
+            <Label fx:id="verifyResult" text="" style="-fx-font-size: 12px;"/>
+        </VBox>
+    </HBox>
+
+    <!-- Certificates Table -->
+    <TableView fx:id="certsTable" prefHeight="360"
+               style="-fx-background-color: #0d1433; -fx-border-color: #1e2a4a; -fx-border-radius: 10; -fx-background-radius: 10;">
+        <columns>
+            <TableColumn fx:id="colCertEvent"   text="Event"              prefWidth="240"/>
+            <TableColumn fx:id="colCertSociety" text="Society"            prefWidth="160"/>
+            <TableColumn fx:id="colCertDate"    text="Issued Date"        prefWidth="140"/>
+            <TableColumn fx:id="colCertCode"    text="Verification Code"  prefWidth="160"/>
+            <TableColumn fx:id="colCertDownload" text="Download"          prefWidth="110"/>
+        </columns>
+        <placeholder>
+            <VBox alignment="CENTER" spacing="8">
+                <Label text="🎓" style="-fx-font-size: 40px;"/>
+                <Label text="No certificates yet." style="-fx-text-fill: #334155; -fx-font-size: 13px; -fx-font-style: italic;"/>
+                <Label text="Attend events to earn participation certificates!"
+                       style="-fx-text-fill: #1e2a4a; -fx-font-size: 12px;"/>
+            </VBox>
+        </placeholder>
+    </TableView>
+
+</VBox>

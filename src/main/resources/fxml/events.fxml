@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.ocsms.gui.controllers.EventController"
+      spacing="16">
+
+    <!-- ── Header ──────────────────────────────────────────────────────── -->
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <Label text="📅  Events" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="createEventBtn" text="+ Create Event"
+                styleClass="btn-primary" onAction="#handleCreateEvent"
+                visible="false" managed="false"/>
+    </HBox>
+    <Label text="Discover and register for upcoming society events." styleClass="page-subtitle"/>
+
+    <!-- ── Events Table ────────────────────────────────────────────────── -->
+    <TableView fx:id="eventTable" styleClass="data-table" prefHeight="350">
+        <columns>
+            <TableColumn fx:id="colEventTitle"    text="Event Title"      prefWidth="220"/>
+            <TableColumn fx:id="colEventSociety"  text="Society"          prefWidth="140"/>
+            <TableColumn fx:id="colEventDate"     text="Date &amp; Time"  prefWidth="160"/>
+            <TableColumn fx:id="colEventVenue"    text="Venue"            prefWidth="130"/>
+            <TableColumn fx:id="colEventCapacity" text="Capacity"         prefWidth="90"/>
+            <TableColumn fx:id="colEventState"    text="Status"           prefWidth="130"/>
+        </columns>
+        <placeholder>
+            <Label text="No events available." styleClass="table-placeholder"/>
+        </placeholder>
+    </TableView>
+
+    <!-- ── Event Detail + Action ───────────────────────────────────────── -->
+    <VBox fx:id="eventDetailPane" spacing="14" styleClass="form-card"
+          visible="false" managed="false">
+        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+        <HBox spacing="20" alignment="TOP_LEFT">
+            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label fx:id="detailEventTitle"   text="Event Title"   styleClass="detail-title"/>
+                <Label fx:id="detailEventSociety" text="by Society"    styleClass="page-subtitle"/>
+                <Label fx:id="detailEventState"   text="Status"        styleClass="state-chip"/>
+
+                <HBox spacing="20">
+                    <VBox spacing="2">
+                        <Label text="Date &amp; Time"  styleClass="detail-field-label"/>
+                        <Label fx:id="detailEventDate" text="—"        styleClass="detail-field-value"/>
+                    </VBox>
+                    <VBox spacing="2">
+                        <Label text="Venue"              styleClass="detail-field-label"/>
+                        <Label fx:id="detailEventVenue" text="—"       styleClass="detail-field-value"/>
+                    </VBox>
+                    <VBox spacing="2">
+                        <Label text="Capacity"                 styleClass="detail-field-label"/>
+                        <Label fx:id="detailEventCapacity" text="—"    styleClass="detail-field-value"/>
+                    </VBox>
+                    <VBox spacing="2">
+                        <Label text="Deadline"                 styleClass="detail-field-label"/>
+                        <Label fx:id="detailEventDeadline" text="—"    styleClass="detail-field-value"/>
+                    </VBox>
+                </HBox>
+
+                <Label text="Description" styleClass="detail-field-label"/>
+                <TextArea fx:id="detailEventDesc" editable="false" wrapText="true"
+                          prefHeight="70" styleClass="detail-textarea"/>
+            </VBox>
+
+            <VBox spacing="10" alignment="TOP_RIGHT" prefWidth="180">
+                <Button fx:id="registerEventBtn" text="Register for Event"
+                        styleClass="btn-primary" maxWidth="Infinity"
+                        onAction="#handleRegisterForEvent"/>
+                <Button fx:id="adminStateBtn" text="Advance State →"
+                        styleClass="btn-secondary" maxWidth="Infinity"
+                        visible="false" managed="false"
+                        onAction="#handleAdvanceState"/>
+                <Button fx:id="cancelEventBtn" text="Cancel Event"
+                        styleClass="btn-danger" maxWidth="Infinity"
+                        visible="false" managed="false"
+                        onAction="#handleCancelEvent"/>
+                <Label fx:id="eventActionStatus" styleClass="success-label" wrapText="true"/>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <!-- ── Create Event Form (Admin only) ─────────────────────────────── -->
+    <VBox fx:id="createEventForm" spacing="14" styleClass="form-card"
+          visible="false" managed="false">
+        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+        <Label text="Create New Event" styleClass="section-title"/>
+
+        <HBox spacing="12">
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Event Title" styleClass="field-label"/>
+                <TextField fx:id="newEventTitle" promptText="e.g. SOFTEC 2025" styleClass="form-field"/>
+            </VBox>
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Venue" styleClass="field-label"/>
+                <TextField fx:id="newEventVenue" promptText="e.g. FAST Auditorium" styleClass="form-field"/>
+            </VBox>
+        </HBox>
+
+        <HBox spacing="12">
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Event Date" styleClass="field-label"/>
+                <DatePicker fx:id="eventDatePicker" styleClass="form-field" maxWidth="Infinity"/>
+            </VBox>
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Registration Deadline" styleClass="field-label"/>
+                <DatePicker fx:id="regDeadlinePicker" styleClass="form-field" maxWidth="Infinity"/>
+            </VBox>
+            <VBox spacing="6">
+                <Label text="Capacity" styleClass="field-label"/>
+                <Spinner fx:id="capacitySpinner" min="10" max="1000" initialValue="100"
+                         styleClass="form-spinner" prefWidth="120"/>
+            </VBox>
+        </HBox>
+
+        <HBox spacing="12">
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Event Type" styleClass="field-label"/>
+                <ComboBox fx:id="eventTypeCombo" promptText="Select type"
+                          styleClass="form-combo" maxWidth="Infinity"/>
+            </VBox>
+        </HBox>
+
+        <VBox spacing="6">
+            <Label text="Description" styleClass="field-label"/>
+            <TextArea fx:id="newEventDesc" wrapText="true" prefHeight="80" styleClass="form-field"/>
+        </VBox>
+
+        <Label fx:id="createEventError" styleClass="error-label"/>
+
+        <HBox spacing="10">
+            <Button text="Create Event" styleClass="btn-primary" onAction="#handleSubmitCreateEvent"/>
+            <Button text="Cancel" styleClass="btn-secondary" onAction="#handleCancelCreateEvent"/>
+        </HBox>
+    </VBox>
+
+</VBox>

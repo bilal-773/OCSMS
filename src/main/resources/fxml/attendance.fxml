@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.ocsms.gui.controllers.AttendanceController"
+      spacing="20">
+
+    <!-- ── Header ─────────────────────────────────────────────────────────── -->
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <Label text="✓  Attendance Management"
+               style="-fx-text-fill: #f1f5f9; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="downloadPdfBtn" text="⬇ Download Attendance PDF"
+                style="-fx-background-color: #0d1433; -fx-text-fill: #818cf8; -fx-font-weight: bold;
+                       -fx-padding: 8 18; -fx-background-radius: 7; -fx-border-color: #1e2a4a;
+                       -fx-border-width: 1; -fx-border-radius: 7; -fx-cursor: hand;"
+                visible="false" managed="false"
+                onAction="#handleDownloadAttendancePdf"/>
+    </HBox>
+    <Label fx:id="pageSubtitleLabel"
+           text="Select an event below, then check/uncheck students to mark attendance."
+           style="-fx-text-fill: #475569; -fx-font-size: 13px;"/>
+
+    <!-- ── Instructions Card (Admin) ──────────────────────────────────────── -->
+    <VBox fx:id="instructionsCard" spacing="8" visible="false" managed="false"
+          style="-fx-background-color: #0a1433; -fx-background-radius: 10; -fx-border-color: #1e2a5a; -fx-border-width: 1; -fx-border-radius: 10;">
+        <padding><Insets top="14" right="16" bottom="14" left="16"/></padding>
+        <Label text="📋  How to Mark Attendance" style="-fx-text-fill: #818cf8; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+        <Label text="1.  Select an event from the dropdown below"  style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+        <Label text="2.  A list of registered students will appear" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+        <Label text="3.  Check ✓ each student who is present"       style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+        <Label text="4.  Click 'Save Attendance' — students marked present get certificates automatically" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+    </VBox>
+
+    <!-- ── Event Selector ─────────────────────────────────────────────────── -->
+    <VBox spacing="8"
+          style="-fx-background-color: #0d1433; -fx-background-radius: 10; -fx-border-color: #1e2a4a; -fx-border-width: 1; -fx-border-radius: 10;">
+        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+        <Label text="SELECT EVENT" style="-fx-text-fill: #475569; -fx-font-size: 10px; -fx-font-weight: bold;"/>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <ComboBox fx:id="eventSelector" promptText="Choose an event to manage attendance..."
+                      HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                      style="-fx-background-color: #111827; -fx-border-color: #1e2a4a;
+                             -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8;"
+                      onAction="#handleEventSelected"/>
+            <Label fx:id="eventStateLabel" text=""
+                   style="-fx-background-color: #1a2040; -fx-text-fill: #818cf8;
+                          -fx-padding: 5 14; -fx-background-radius: 20; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+        </HBox>
+        <!-- Event details mini-bar -->
+        <HBox fx:id="eventDetailsBar" spacing="24" visible="false" managed="false">
+            <Label fx:id="eventDateLabel" text="" style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+            <Label fx:id="eventCapLabel"  text="" style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+            <Label fx:id="eventRegLabel"  text="" style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+        </HBox>
+    </VBox>
+
+    <!-- ── Attendance Table (Admin/Advisor only) ───────────────────────────── -->
+    <VBox fx:id="attendanceTablePane" spacing="12" visible="false" managed="false">
+
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <Label text="Registered Students"
+                   style="-fx-text-fill: #cbd5e1; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox spacing="16" alignment="CENTER">
+                <Label fx:id="presentCount" text="Present: 0"
+                       style="-fx-text-fill: #34d399; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <Label fx:id="absentCount" text="Absent: 0"
+                       style="-fx-text-fill: #f87171; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <Label fx:id="attendanceSummary" text="0 / 0 marked"
+                       style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+            </HBox>
+        </HBox>
+
+        <TableView fx:id="attendanceTable" prefHeight="340"
+                   style="-fx-background-color: #0d1433; -fx-border-color: #1e2a4a;
+                          -fx-border-radius: 10; -fx-background-radius: 10;">
+            <columns>
+                <TableColumn fx:id="colAttPresent" text="✓ Present" prefWidth="90"/>
+                <TableColumn fx:id="colAttName"    text="Student Name"  prefWidth="200"/>
+                <TableColumn fx:id="colAttRoll"    text="Roll Number"   prefWidth="130"/>
+                <TableColumn fx:id="colAttStatus"  text="Reg. Status"   prefWidth="130"/>
+                <TableColumn fx:id="colAttCert"    text="Certificate"   prefWidth="120"/>
+            </columns>
+            <placeholder>
+                <VBox alignment="CENTER" spacing="6">
+                    <Label text="👥" style="-fx-font-size: 32px;"/>
+                    <Label text="No students registered for this event yet."
+                           style="-fx-text-fill: #334155; -fx-font-style: italic;"/>
+                </VBox>
+            </placeholder>
+        </TableView>
+
+        <!-- Action bar -->
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <Button fx:id="markAllPresentBtn" text="✓ Mark All Present"
+                    style="-fx-background-color: #14532d; -fx-text-fill: #34d399; -fx-font-weight: bold;
+                           -fx-padding: 9 18; -fx-background-radius: 7; -fx-cursor: hand;"
+                    onAction="#handleMarkAllPresent"/>
+            <Button fx:id="clearAllBtn" text="✗ Clear All"
+                    style="-fx-background-color: #1a0a0a; -fx-text-fill: #f87171; -fx-font-weight: bold;
+                           -fx-padding: 9 18; -fx-background-radius: 7; -fx-cursor: hand;"
+                    onAction="#handleClearAll"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="saveAttendanceBtn" text="💾  Save &amp; Generate Certificates"
+                    style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-font-weight: bold;
+                           -fx-padding: 9 22; -fx-background-radius: 8; -fx-cursor: hand;"
+                    onAction="#handleSaveAttendance"/>
+        </HBox>
+
+        <Label fx:id="certStatusLabel" text=""
+               style="-fx-text-fill: #34d399; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+    </VBox>
+
+    <!-- ── Student View: My Event Registrations ───────────────────────────── -->
+    <VBox fx:id="myRegistrationsPane" spacing="12" visible="false" managed="false">
+        <Label text="My Event Registrations"
+               style="-fx-text-fill: #cbd5e1; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+        <Label text="Events you have registered for. Attend to earn a participation certificate."
+               style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+        <TableView fx:id="myRegsTable" prefHeight="280"
+                   style="-fx-background-color: #0d1433; -fx-border-color: #1e2a4a;
+                          -fx-border-radius: 10; -fx-background-radius: 10;">
+            <columns>
+                <TableColumn fx:id="colMyEvent"    text="Event"       prefWidth="240"/>
+                <TableColumn fx:id="colMyDate"     text="Date"        prefWidth="130"/>
+                <TableColumn fx:id="colMyStatus"   text="Reg. Status" prefWidth="130"/>
+                <TableColumn fx:id="colMyAttended" text="Attended"    prefWidth="100"/>
+                <TableColumn fx:id="colMyCert"     text="Certificate" prefWidth="120"/>
+            </columns>
+            <placeholder>
+                <Label text="You have not registered for any events yet."
+                       style="-fx-text-fill: #334155; -fx-font-style: italic;"/>
+            </placeholder>
+        </TableView>
+    </VBox>
+
+</VBox>

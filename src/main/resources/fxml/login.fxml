@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.ocsms.gui.controllers.LoginController"
+           style="-fx-background-color: #0f1623;">
+
+    <!-- ── Full-screen background gradient ────────────────────────── -->
+    <Pane style="-fx-background-color: linear-gradient(to bottom right, #0d1220, #111827, #0f1623);"/>
+
+    <!-- ── Subtle decorative blobs ─────────────────────────────────── -->
+    <Circle centerX="0" centerY="0" radius="340"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 100%, #3b82f620, transparent); -fx-stroke: transparent;"
+            translateX="-100" translateY="-200"/>
+    <Circle centerX="0" centerY="0" radius="260"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 100%, #6366f115, transparent); -fx-stroke: transparent;"
+            translateX="600" translateY="350"/>
+
+    <!-- ── Main centered layout ─────────────────────────────────────── -->
+    <VBox alignment="CENTER" spacing="0">
+
+        <!-- Logo + Title block -->
+        <VBox alignment="CENTER" spacing="8">
+            <!-- Icon badge -->
+            <StackPane>
+                <Rectangle arcWidth="18" arcHeight="18" width="64" height="64"
+                           style="-fx-fill: #1e3a5f; -fx-stroke: #2d5a8e; -fx-stroke-width: 1;"/>
+                <Label text="🎓" style="-fx-font-size: 28px;"/>
+            </StackPane>
+
+            <!-- App name -->
+            <Label text="OCSMS"
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;
+                          -fx-font-family: 'Segoe UI', Arial, sans-serif;
+                          -fx-effect: dropshadow(gaussian, #3b82f6, 12, 0.3, 0, 0);"/>
+
+            <!-- Subtitle -->
+            <Label text="Campus Society Management System"
+                   style="-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+        </VBox>
+
+        <!-- Spacer -->
+        <Region prefHeight="24"/>
+
+        <!-- ══ Login Card ════════════════════════════════════════════════ -->
+        <VBox maxWidth="380" minWidth="380" spacing="0"
+              style="-fx-background-color: #1a2235;
+                     -fx-background-radius: 14;
+                     -fx-border-color: #263352;
+                     -fx-border-width: 1;
+                     -fx-border-radius: 14;
+                     -fx-effect: dropshadow(gaussian, #000000, 50, 0.7, 0, 10);">
+
+            <!-- Tab Header row -->
+            <HBox style="-fx-background-color: transparent; -fx-border-color: transparent transparent #263352 transparent; -fx-border-width: 0 0 1 0;">
+                <Button fx:id="loginTabBtn" text="LOGIN" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-text-fill: #f1f5f9;
+                               -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 14 0;
+                               -fx-cursor: hand; -fx-border-color: transparent transparent #3b82f6 transparent;
+                               -fx-border-width: 0 0 2 0; -fx-background-radius: 0;
+                               -fx-font-family: 'Segoe UI', Arial, sans-serif;"
+                        onAction="#switchToLogin"/>
+                <Button fx:id="registerTabBtn" text="REGISTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-text-fill: #64748b;
+                               -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 14 0;
+                               -fx-cursor: hand; -fx-border-color: transparent; -fx-border-width: 0;
+                               -fx-background-radius: 0;
+                               -fx-font-family: 'Segoe UI', Arial, sans-serif;"
+                        onAction="#switchToRegister"/>
+            </HBox>
+
+            <!-- ── TabPane content (using StackPane to switch panels) ── -->
+            <StackPane>
+
+                <!-- ── LOGIN PANEL ── -->
+                <VBox fx:id="loginPanel" spacing="14" visible="true" managed="true">
+                    <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+
+                    <!-- Roll Number field -->
+                    <VBox spacing="6">
+                        <Label text="ROLL NUMBER"
+                               style="-fx-text-fill: #94a3b8; -fx-font-size: 10px; -fx-font-weight: bold;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        <HBox alignment="CENTER_LEFT" spacing="0"
+                              style="-fx-background-color: white; -fx-background-radius: 8;
+                                     -fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 8;">
+                            <Label text="🔒" style="-fx-font-size: 13px; -fx-padding: 0 8 0 12; -fx-text-fill: #6b7280;"/>
+                            <TextField fx:id="loginRollField" promptText="e.g.  2021CS01"
+                                       HBox.hgrow="ALWAYS"
+                                       style="-fx-background-color: transparent; -fx-text-fill: #111827;
+                                              -fx-prompt-text-fill: #9ca3af; -fx-border-color: transparent;
+                                              -fx-border-width: 0; -fx-font-size: 13px; -fx-padding: 11 12 11 0;
+                                              -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Password field -->
+                    <VBox spacing="6">
+                        <Label text="PASSWORD"
+                               style="-fx-text-fill: #94a3b8; -fx-font-size: 10px; -fx-font-weight: bold;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        <HBox alignment="CENTER_LEFT" spacing="0"
+                              style="-fx-background-color: white; -fx-background-radius: 8;
+                                     -fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 8;">
+                            <Label text="🔒" style="-fx-font-size: 13px; -fx-padding: 0 8 0 12; -fx-text-fill: #6b7280;"/>
+                            <PasswordField fx:id="loginPasswordField" promptText="Enter your password"
+                                           HBox.hgrow="ALWAYS"
+                                           style="-fx-background-color: transparent; -fx-text-fill: #111827;
+                                                  -fx-prompt-text-fill: #9ca3af; -fx-border-color: transparent;
+                                                  -fx-border-width: 0; -fx-font-size: 13px; -fx-padding: 11 12 11 0;
+                                                  -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Error label -->
+                    <HBox alignment="CENTER_LEFT" spacing="6">
+                        <Label fx:id="loginErrorIcon" text="" style="-fx-font-size: 12px;"/>
+                        <Label fx:id="loginErrorLabel" wrapText="true"
+                               style="-fx-text-fill: #f97316; -fx-font-size: 12px;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                    </HBox>
+
+                    <!-- Login button -->
+                    <Button fx:id="loginBtn" text="Login" maxWidth="Infinity"
+                            style="-fx-background-color: #2563eb; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 12 0;
+                                   -fx-background-radius: 8; -fx-cursor: hand;
+                                   -fx-font-family: 'Segoe UI', Arial, sans-serif;
+                                   -fx-effect: dropshadow(gaussian, #1d4ed8, 10, 0.4, 0, 3);"
+                            onAction="#handleLogin"/>
+
+                    <!-- Forgot password -->
+                    <HBox alignment="CENTER">
+                        <Label text="Forgot your password?"
+                               style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-cursor: hand;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                    </HBox>
+
+                    <!-- Fixed / hardcoded accounts -->
+                    <VBox spacing="5" style="-fx-background-color: #111827; -fx-background-radius: 8;
+                                             -fx-border-color: #263352; -fx-border-width: 1; -fx-border-radius: 8;">
+                        <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
+                        <Label text="FIXED ACCOUNTS (admin-managed)"
+                               style="-fx-text-fill: #475569; -fx-font-size: 9px;
+                                      -fx-font-weight: bold; -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        <Label text="Treasurer:   TR001     /  treasury1"
+                               style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-family: monospace;"/>
+                        <Label text="Advisor:     FA001     /  faculty123"
+                               style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-family: monospace;"/>
+                        <Label text="Uni Admin:   ADMIN001  /  admin@nu"
+                               style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-family: monospace;"/>
+                        <Label text="Students → Register tab above ↑   |   Presidents → Uni Admin adds them"
+                               style="-fx-text-fill: #3b82f6; -fx-font-size: 10px; -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                    </VBox>
+                </VBox>
+
+                <!-- ── REGISTER PANEL ── -->
+                <VBox fx:id="registerPanel" spacing="12" visible="false" managed="false">
+                    <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+
+                    <!-- Full Name -->
+                    <VBox spacing="6">
+                        <Label text="FULL NAME"
+                               style="-fx-text-fill: #94a3b8; -fx-font-size: 10px; -fx-font-weight: bold;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        <HBox alignment="CENTER_LEFT" spacing="0"
+                              style="-fx-background-color: white; -fx-background-radius: 8;
+                                     -fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 8;">
+                            <Label text="👤" style="-fx-font-size: 13px; -fx-padding: 0 8 0 12; -fx-text-fill: #6b7280;"/>
+                            <TextField fx:id="regNameField" promptText="e.g. Muhammad Bilal"
+                                       HBox.hgrow="ALWAYS"
+                                       style="-fx-background-color: transparent; -fx-text-fill: #111827;
+                                              -fx-prompt-text-fill: #9ca3af; -fx-border-color: transparent;
+                                              -fx-border-width: 0; -fx-font-size: 13px; -fx-padding: 11 12 11 0;
+                                              -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Roll Number (full width, students only) -->
+                    <VBox spacing="6">
+                        <Label text="ROLL NUMBER"
+                               style="-fx-text-fill: #94a3b8; -fx-font-size: 10px; -fx-font-weight: bold;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        <HBox alignment="CENTER_LEFT" spacing="0"
+                              style="-fx-background-color: white; -fx-background-radius: 8;
+                                     -fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 8;">
+                            <Label text="🎓" style="-fx-font-size: 13px; -fx-padding: 0 8 0 12; -fx-text-fill: #6b7280;"/>
+                            <TextField fx:id="regRollField" promptText="21F-3456"
+                                       HBox.hgrow="ALWAYS"
+                                       style="-fx-background-color: transparent; -fx-text-fill: #111827;
+                                              -fx-prompt-text-fill: #9ca3af; -fx-border-color: transparent;
+                                              -fx-border-width: 0; -fx-font-size: 13px; -fx-padding: 11 12 11 0;
+                                              -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Email -->
+                    <VBox spacing="6">
+                        <Label text="EMAIL"
+                               style="-fx-text-fill: #94a3b8; -fx-font-size: 10px; -fx-font-weight: bold;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        <HBox alignment="CENTER_LEFT" spacing="0"
+                              style="-fx-background-color: white; -fx-background-radius: 8;
+                                     -fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 8;">
+                            <Label text="✉" style="-fx-font-size: 13px; -fx-padding: 0 8 0 12; -fx-text-fill: #6b7280;"/>
+                            <TextField fx:id="regEmailField" promptText="name@nu.edu.pk"
+                                       HBox.hgrow="ALWAYS"
+                                       style="-fx-background-color: transparent; -fx-text-fill: #111827;
+                                              -fx-prompt-text-fill: #9ca3af; -fx-border-color: transparent;
+                                              -fx-border-width: 0; -fx-font-size: 13px; -fx-padding: 11 12 11 0;
+                                              -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Password -->
+                    <VBox spacing="6">
+                        <Label text="PASSWORD"
+                               style="-fx-text-fill: #94a3b8; -fx-font-size: 10px; -fx-font-weight: bold;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        <HBox alignment="CENTER_LEFT" spacing="0"
+                              style="-fx-background-color: white; -fx-background-radius: 8;
+                                     -fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 8;">
+                            <Label text="🔒" style="-fx-font-size: 13px; -fx-padding: 0 8 0 12; -fx-text-fill: #6b7280;"/>
+                            <PasswordField fx:id="regPasswordField" promptText="Minimum 6 characters"
+                                           HBox.hgrow="ALWAYS"
+                                           style="-fx-background-color: transparent; -fx-text-fill: #111827;
+                                                  -fx-prompt-text-fill: #9ca3af; -fx-border-color: transparent;
+                                                  -fx-border-width: 0; -fx-font-size: 13px; -fx-padding: 11 12 11 0;
+                                                  -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Register error label -->
+                    <Label fx:id="regErrorLabel" wrapText="true"
+                           style="-fx-text-fill: #f97316; -fx-font-size: 12px;
+                                  -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+
+                    <!-- Register button -->
+                    <Button fx:id="registerBtn" text="Create Account" maxWidth="Infinity"
+                            style="-fx-background-color: #2563eb; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 12 0;
+                                   -fx-background-radius: 8; -fx-cursor: hand;
+                                   -fx-font-family: 'Segoe UI', Arial, sans-serif;
+                                   -fx-effect: dropshadow(gaussian, #1d4ed8, 10, 0.4, 0, 3);"
+                            onAction="#handleRegister"/>
+
+                    <!-- Info note -->
+                    <VBox spacing="4"
+                          style="-fx-background-color: #111827; -fx-background-radius: 8;
+                                 -fx-border-color: #263352; -fx-border-width: 1; -fx-border-radius: 8;">
+                        <padding><Insets top="10" right="12" bottom="10" left="12"/></padding>
+                        <Label text="ℹ  Only Students and Society Presidents can self-register."
+                               wrapText="true"
+                               style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                        <Label text="Treasurer, Faculty Advisor, and University Admin accounts are managed by the system administrator."
+                               wrapText="true"
+                               style="-fx-text-fill: #475569; -fx-font-size: 10px;
+                                      -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+                    </VBox>
+                </VBox>
+
+            </StackPane>
+        </VBox>
+
+        <!-- Spacer -->
+        <Region prefHeight="20"/>
+
+        <!-- ══ Bottom status bar ══════════════════════════════════════════ -->
+        <HBox maxWidth="380" minWidth="380" alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" spacing="6" HBox.hgrow="ALWAYS">
+                <!-- Green dot -->
+                <Circle radius="4" style="-fx-fill: #22c55e;"/>
+                <Label text="System Online"
+                       style="-fx-text-fill: #64748b; -fx-font-size: 11px;
+                              -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+            </HBox>
+            <Label text="v2.4.0-stable"
+                   style="-fx-text-fill: #64748b; -fx-font-size: 11px;
+                          -fx-font-family: 'Segoe UI', Arial, sans-serif;"/>
+        </HBox>
+
+    </VBox>
+</StackPane>

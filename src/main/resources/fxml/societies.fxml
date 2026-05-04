@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.ocsms.gui.controllers.SocietyController"
+      spacing="16">
+
+    <!-- ── Header ──────────────────────────────────────────────────────── -->
+    <HBox alignment="CENTER_LEFT" spacing="12">
+        <Label text="Societies" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="createSocietyBtn" text="+ Create Society"
+                styleClass="btn-primary" onAction="#handleCreateSociety"
+                visible="false" managed="false"/>
+    </HBox>
+    <Label text="Browse and search all registered student societies at FAST-NUCES Peshawar."
+           styleClass="page-subtitle"/>
+
+    <!-- ── Search + Filter ─────────────────────────────────────────────── -->
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="searchBar" promptText="Search societies..."
+                   styleClass="form-field" HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="categoryFilter" promptText="All Categories"
+                  styleClass="form-combo" prefWidth="180" onAction="#handleCategoryFilter"/>
+        <Button text="Search" styleClass="btn-secondary" onAction="#handleSearch"/>
+    </HBox>
+
+    <!-- ── Main split: Table + Detail ──────────────────────────────────── -->
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+
+        <!-- Societies Table -->
+        <VBox spacing="8" HBox.hgrow="ALWAYS">
+            <TableView fx:id="societiesTable" styleClass="data-table" VBox.vgrow="ALWAYS" prefHeight="420">
+                <columns>
+                    <TableColumn fx:id="colSocietyName"    text="Society Name"   prefWidth="200"/>
+                    <TableColumn fx:id="colSocietyCategory" text="Category"      prefWidth="130"/>
+                    <TableColumn fx:id="colMemberCount"     text="Members"       prefWidth="80"/>
+                    <TableColumn fx:id="colSocietyStatus"   text="Status"        prefWidth="100"/>
+                </columns>
+                <placeholder>
+                    <Label text="No societies found." styleClass="table-placeholder"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- Society Detail Panel -->
+        <VBox fx:id="societyDetailPane" spacing="14" prefWidth="340"
+              styleClass="detail-panel" visible="false" managed="false">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <Label fx:id="detailSocietyName" text="Society Name" styleClass="detail-title"/>
+            <Label fx:id="detailCategory"    text="Category"     styleClass="detail-category-chip"/>
+
+            <HBox spacing="20">
+                <VBox spacing="2">
+                    <Label text="Members"   styleClass="detail-field-label"/>
+                    <Label fx:id="detailMemberCount" text="—" styleClass="detail-field-value"/>
+                </VBox>
+                <VBox spacing="2">
+                    <Label text="Status"   styleClass="detail-field-label"/>
+                    <Label fx:id="detailAdvisor" text="—" styleClass="detail-field-value"/>
+                </VBox>
+            </HBox>
+
+            <!-- Logo status (President only) -->
+            <Label fx:id="logoStatusLabel" text="No logo uploaded."
+                   style="-fx-text-fill: #475569; -fx-font-size: 11px;"/>
+
+            <Label text="Description" styleClass="detail-field-label"/>
+            <TextArea fx:id="detailDescription" wrapText="true" editable="false"
+                      prefHeight="80" styleClass="detail-textarea"/>
+
+            <Label text="Upcoming Events" styleClass="detail-field-label"/>
+            <ListView fx:id="detailEventList" prefHeight="100" styleClass="detail-list"/>
+
+            <!-- Members list (President only) -->
+            <VBox fx:id="membersPane" spacing="6" visible="false" managed="false">
+                <Label text="Society Members" styleClass="detail-field-label"/>
+                <ListView fx:id="membersList" prefHeight="140" styleClass="detail-list"/>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Upload Logo (President only) -->
+            <Button fx:id="uploadLogoBtn" text="Upload / Update Logo"
+                    styleClass="btn-secondary" maxWidth="Infinity"
+                    visible="false" managed="false"
+                    onAction="#handleUploadLogo"/>
+
+            <Button fx:id="applyMembershipBtn" text="Apply for Membership"
+                    styleClass="btn-primary" maxWidth="Infinity"
+                    onAction="#handleApplyMembership"/>
+            <Button fx:id="archiveSocietyBtn" text="Archive Society"
+                    styleClass="btn-secondary" maxWidth="Infinity"
+                    visible="false" managed="false"
+                    onAction="#handleArchiveSociety"/>
+            <Button fx:id="deleteSocietyBtn" text="Delete Society"
+                    styleClass="btn-danger" maxWidth="Infinity"
+                    visible="false" managed="false"
+                    onAction="#handleDeleteSociety"/>
+        </VBox>
+    </HBox>
+
+    <!-- ── Create Society Dialog (hidden by default) ──────────────────── -->
+    <VBox fx:id="createSocietyForm" spacing="14" styleClass="form-card"
+          visible="false" managed="false">
+        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+        <Label text="Create New Society" styleClass="section-title"/>
+
+        <HBox spacing="12">
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Society Name" styleClass="field-label"/>
+                <TextField fx:id="newSocietyName" promptText="e.g. SOFTEC" styleClass="form-field"/>
+            </VBox>
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Category" styleClass="field-label"/>
+                <ComboBox fx:id="newSocietyCategory" promptText="Select category"
+                          styleClass="form-combo" maxWidth="Infinity"/>
+            </VBox>
+        </HBox>
+
+        <VBox spacing="6">
+            <Label text="Description" styleClass="field-label"/>
+            <TextArea fx:id="newSocietyDesc" promptText="Society description..."
+                      wrapText="true" prefHeight="80" styleClass="form-field"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="Member Limit" styleClass="field-label"/>
+            <Spinner fx:id="memberLimitSpinner" min="10" max="500" initialValue="50"
+                     styleClass="form-spinner" prefWidth="120"/>
+        </VBox>
+
+        <Label fx:id="createSocietyError" styleClass="error-label"/>
+
+        <HBox spacing="10">
+            <Button text="Create Society" styleClass="btn-primary" onAction="#handleSubmitCreateSociety"/>
+            <Button text="Cancel" styleClass="btn-secondary" onAction="#handleCancelCreate"/>
+        </HBox>
+    </VBox>
+
+    <!-- Apply for Membership Dialog -->
+    <VBox fx:id="applyMembershipForm" spacing="12" styleClass="form-card"
+          visible="false" managed="false">
+        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+        <Label text="Apply for Membership" styleClass="section-title"/>
+        <Label fx:id="applyingSocietyLabel" text="Society: —" styleClass="page-subtitle"/>
+
+        <VBox spacing="6">
+            <Label text="Motivation / Statement (min 20 chars)" styleClass="field-label"/>
+            <TextArea fx:id="motivationArea" promptText="Why do you want to join this society?"
+                      wrapText="true" prefHeight="100" styleClass="form-field"/>
+        </VBox>
+
+        <Label fx:id="applyErrorLabel" styleClass="error-label"/>
+
+        <HBox spacing="10">
+            <Button text="Submit Application" styleClass="btn-primary" onAction="#handleSubmitApplication"/>
+            <Button text="Cancel" styleClass="btn-secondary" onAction="#handleCancelApply"/>
+        </HBox>
+    </VBox>
+
+</VBox>

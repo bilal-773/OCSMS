@@ -1,0 +1,17 @@
+package com.ocsms.enums;
+
+public enum EventState {
+    DRAFT,
+    VALIDATING,
+    AWAITING_FINANCE,
+    AWAITING_ADVISOR,
+    PUBLISHED,
+    REGISTRATION_OPEN,
+    REGISTRATION_CLOSED,
+    ONGOING,
+    COMPLETED,
+    ARCHIVED,
+    CANCELLED,
+    DISCARDED,
+    RESOLVING_ISSUES
+}

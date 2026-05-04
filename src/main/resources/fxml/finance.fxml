@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.ocsms.gui.controllers.FinanceController"
+      spacing="20">
+
+    <!-- Page Header -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <Label text="Finance &amp; Budget Management"
+               style="-fx-text-fill: #f1f5f9; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="exportPdfBtn" text="Export PDF Report"
+                style="-fx-background-color: #0d1433; -fx-text-fill: #818cf8; -fx-font-weight: bold;
+                       -fx-padding: 9 20; -fx-background-radius: 7; -fx-border-color: #2d3a6a;
+                       -fx-border-width: 1; -fx-border-radius: 7; -fx-cursor: hand;"
+                onAction="#handleExportPdf"/>
+    </HBox>
+    <Label text="Treasurer allocates budgets to societies. Presidents upload bills against allocated funds."
+           style="-fx-text-fill: #475569; -fx-font-size: 13px;" wrapText="true"/>
+
+    <!-- ══ TREASURER / ADMIN VIEW ══════════════════════════════════════════════ -->
+    <VBox fx:id="treasurerPane" spacing="20" visible="false" managed="false">
+
+        <!-- Societies Table -->
+        <VBox spacing="10"
+              style="-fx-background-color: #0d1433; -fx-background-radius: 12;
+                     -fx-border-color: #1e2a4a; -fx-border-width: 1; -fx-border-radius: 12;">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+            <Label text="Societies — Budget Overview"
+                   style="-fx-text-fill: #cbd5e1; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <Label text="Select a society to allocate or review its budget."
+                   style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+            <TableView fx:id="societyListTable"
+                       style="-fx-background-color: #0d1433; -fx-border-color: #1e2a4a;"
+                       prefHeight="240">
+                <columns>
+                    <TableColumn fx:id="colSocName"      text="Society Name"    prefWidth="200"/>
+                    <TableColumn fx:id="colSocCategory"  text="Category"        prefWidth="130"/>
+                    <TableColumn fx:id="colSocAllocated" text="Allocated (Rs.)" prefWidth="140"/>
+                    <TableColumn fx:id="colSocSpent"     text="Spent (Rs.)"     prefWidth="140"/>
+                    <TableColumn fx:id="colSocRemaining" text="Remaining (Rs.)" prefWidth="140"/>
+                </columns>
+                <placeholder>
+                    <Label text="No societies found." style="-fx-text-fill: #334155; -fx-font-style: italic;"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- Allocate Form (shown when society selected) -->
+        <VBox fx:id="allocateForm" spacing="14" visible="false" managed="false"
+              style="-fx-background-color: #0d1433; -fx-background-radius: 12;
+                     -fx-border-color: #1e2a4a; -fx-border-width: 1; -fx-border-radius: 12;">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+            <Label fx:id="allocatingSocietyLabel" text="Allocating budget to: —"
+                   style="-fx-text-fill: #818cf8; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+
+            <HBox spacing="12">
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="BUDGET AMOUNT (Rs.)"
+                           style="-fx-text-fill: #64748b; -fx-font-size: 10px; -fx-font-weight: bold;"/>
+                    <TextField fx:id="allocAmountField" promptText="e.g. 50000"
+                               style="-fx-background-color: #111827; -fx-text-fill: #f1f5f9;
+                                      -fx-prompt-text-fill: #374151; -fx-border-color: #2d3748;
+                                      -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;
+                                      -fx-padding: 9 12; -fx-font-size: 13px;"/>
+                </VBox>
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="EXPIRY DATE"
+                           style="-fx-text-fill: #64748b; -fx-font-size: 10px; -fx-font-weight: bold;"/>
+                    <DatePicker fx:id="allocExpiryPicker" maxWidth="Infinity"
+                                style="-fx-background-color: #111827; -fx-border-color: #2d3748;
+                                       -fx-border-radius: 6; -fx-background-radius: 6;"/>
+                </VBox>
+            </HBox>
+            <VBox spacing="6">
+                <Label text="NOTE / PURPOSE"
+                       style="-fx-text-fill: #64748b; -fx-font-size: 10px; -fx-font-weight: bold;"/>
+                <TextField fx:id="allocNoteField" promptText="e.g. Allocated for annual event expenses"
+                           style="-fx-background-color: #111827; -fx-text-fill: #f1f5f9;
+                                  -fx-prompt-text-fill: #374151; -fx-border-color: #2d3748;
+                                  -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;
+                                  -fx-padding: 9 12; -fx-font-size: 13px;"/>
+            </VBox>
+
+            <Label fx:id="allocErrorLabel" text=""
+                   style="-fx-text-fill: #f87171; -fx-font-size: 12px;" wrapText="true"/>
+
+            <HBox spacing="10">
+                <Button fx:id="confirmAllocateBtn" text="Allocate Budget"
+                        style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-font-weight: bold;
+                               -fx-padding: 9 22; -fx-background-radius: 7; -fx-cursor: hand;"
+                        onAction="#handleAllocateBudget"/>
+                <Button text="Cancel"
+                        style="-fx-background-color: #1a2040; -fx-text-fill: #94a3b8; -fx-font-weight: bold;
+                               -fx-padding: 9 22; -fx-background-radius: 7; -fx-cursor: hand;"
+                        onAction="#handleCancelAllocate"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <!-- ══ PRESIDENT VIEW ══════════════════════════════════════════════════════ -->
+    <VBox fx:id="presidentPane" spacing="20" visible="false" managed="false">
+
+        <!-- Budget Summary -->
+        <VBox spacing="14"
+              style="-fx-background-color: #0d1433; -fx-background-radius: 12;
+                     -fx-border-color: #1e2a4a; -fx-border-width: 1; -fx-border-radius: 12;">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <Label fx:id="budgetSocietyLabel" text="Society — Budget Overview"
+                   style="-fx-text-fill: #818cf8; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Label fx:id="budgetNoteLabel" text="—"
+                   style="-fx-text-fill: #64748b; -fx-font-size: 12px;" wrapText="true"/>
+
+            <!-- Budget Stats -->
+            <HBox spacing="16">
+                <VBox HBox.hgrow="ALWAYS" spacing="4"
+                      style="-fx-background-color: #071a10; -fx-background-radius: 8;
+                             -fx-border-color: #14532d; -fx-border-width: 1; -fx-border-radius: 8;">
+                    <padding><Insets top="14" right="14" bottom="14" left="14"/></padding>
+                    <Label text="TOTAL ALLOCATED"
+                           style="-fx-text-fill: #475569; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+                    <Label fx:id="budgetTotalLabel" text="Rs. 0.00"
+                           style="-fx-text-fill: #34d399; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+                </VBox>
+                <VBox HBox.hgrow="ALWAYS" spacing="4"
+                      style="-fx-background-color: #1a0707; -fx-background-radius: 8;
+                             -fx-border-color: #991b1b; -fx-border-width: 1; -fx-border-radius: 8;">
+                    <padding><Insets top="14" right="14" bottom="14" left="14"/></padding>
+                    <Label text="SPENT"
+                           style="-fx-text-fill: #475569; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+                    <Label fx:id="budgetUsedLabel" text="Rs. 0.00"
+                           style="-fx-text-fill: #f87171; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+                </VBox>
+                <VBox HBox.hgrow="ALWAYS" spacing="4"
+                      style="-fx-background-color: #0d1433; -fx-background-radius: 8;
+                             -fx-border-color: #1e3a8a; -fx-border-width: 1; -fx-border-radius: 8;">
+                    <padding><Insets top="14" right="14" bottom="14" left="14"/></padding>
+                    <Label text="REMAINING"
+                           style="-fx-text-fill: #475569; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+                    <Label fx:id="budgetRemainingLabel" text="Rs. 0.00"
+                           style="-fx-text-fill: #818cf8; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Progress Bar -->
+            <VBox spacing="6">
+                <HBox>
+                    <Label text="Budget Utilization"
+                           style="-fx-text-fill: #475569; -fx-font-size: 11px;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="budgetExpiryLabel" text=""
+                           style="-fx-text-fill: #475569; -fx-font-size: 11px;"/>
+                </HBox>
+                <ProgressBar fx:id="budgetProgressBar" maxWidth="Infinity" prefHeight="10"
+                             style="-fx-accent: #f87171; -fx-background-color: #1a2040;
+                                    -fx-background-radius: 5; -fx-border-radius: 5;"/>
+            </VBox>
+        </VBox>
+
+        <!-- Bills Section -->
+        <VBox spacing="12"
+              style="-fx-background-color: #0d1433; -fx-background-radius: 12;
+                     -fx-border-color: #1e2a4a; -fx-border-width: 1; -fx-border-radius: 12;">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="Expense Bills &amp; Receipts"
+                       style="-fx-text-fill: #cbd5e1; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Upload New Bill"
+                        style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-font-weight: bold;
+                               -fx-padding: 8 18; -fx-background-radius: 7; -fx-cursor: hand;"
+                        onAction="#handleShowUploadBillForm"/>
+            </HBox>
+
+            <TableView fx:id="billsTable" prefHeight="200"
+                       style="-fx-background-color: #0d1433; -fx-border-color: #1e2a4a;">
+                <columns>
+                    <TableColumn fx:id="colBillDate"   text="Date"          prefWidth="110"/>
+                    <TableColumn fx:id="colBillDesc"   text="Description"   prefWidth="280"/>
+                    <TableColumn fx:id="colBillAmount" text="Amount (Rs.)"  prefWidth="130"/>
+                    <TableColumn fx:id="colBillFile"   text="Attached File" prefWidth="200"/>
+                </columns>
+                <placeholder>
+                    <Label text="No bills uploaded yet." style="-fx-text-fill: #334155; -fx-font-style: italic;"/>
+                </placeholder>
+            </TableView>
+
+            <!-- Upload Bill Form -->
+            <VBox fx:id="uploadBillForm" spacing="12" visible="false" managed="false"
+                  style="-fx-background-color: #111827; -fx-background-radius: 8;
+                         -fx-border-color: #2d3748; -fx-border-width: 1; -fx-border-radius: 8;">
+                <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                <Label text="Upload Bill / Receipt"
+                       style="-fx-text-fill: #94a3b8; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+
+                <HBox spacing="12">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="DESCRIPTION"
+                               style="-fx-text-fill: #64748b; -fx-font-size: 10px; -fx-font-weight: bold;"/>
+                        <TextField fx:id="billDescField"
+                                   promptText="e.g. Venue booking for event"
+                                   style="-fx-background-color: #1a1f2e; -fx-text-fill: #f1f5f9;
+                                          -fx-prompt-text-fill: #374151; -fx-border-color: #2d3748;
+                                          -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;
+                                          -fx-padding: 9 12; -fx-font-size: 13px;"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="AMOUNT (Rs.)"
+                               style="-fx-text-fill: #64748b; -fx-font-size: 10px; -fx-font-weight: bold;"/>
+                        <TextField fx:id="billAmountField" promptText="e.g. 8000" prefWidth="140"
+                                   style="-fx-background-color: #1a1f2e; -fx-text-fill: #f1f5f9;
+                                          -fx-prompt-text-fill: #374151; -fx-border-color: #2d3748;
+                                          -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;
+                                          -fx-padding: 9 12; -fx-font-size: 13px;"/>
+                    </VBox>
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Button text="Browse File..."
+                            style="-fx-background-color: #1a2040; -fx-text-fill: #94a3b8; -fx-font-weight: bold;
+                                   -fx-padding: 8 16; -fx-background-radius: 7; -fx-border-color: #2d3a6a;
+                                   -fx-border-width: 1; -fx-border-radius: 7; -fx-cursor: hand;"
+                            onAction="#handleBrowseBillFile"/>
+                    <Label fx:id="billFileLabel" text="No file chosen"
+                           style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                </HBox>
+
+                <Label fx:id="billErrorLabel" text=""
+                       style="-fx-text-fill: #f87171; -fx-font-size: 12px;"/>
+
+                <HBox spacing="10">
+                    <Button text="Submit Bill"
+                            style="-fx-background-color: #4f46e5; -fx-text-fill: white; -fx-font-weight: bold;
+                                   -fx-padding: 9 22; -fx-background-radius: 7; -fx-cursor: hand;"
+                            onAction="#handleSubmitBill"/>
+                    <Button text="Cancel"
+                            style="-fx-background-color: #1a2040; -fx-text-fill: #94a3b8; -fx-font-weight: bold;
+                                   -fx-padding: 9 22; -fx-background-radius: 7; -fx-cursor: hand;"
+                            onAction="#handleCancelBillUpload"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </VBox>
+
+</VBox>

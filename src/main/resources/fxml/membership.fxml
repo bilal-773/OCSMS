@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.ocsms.gui.controllers.MembershipController"
+      spacing="16">
+
+    <!-- ── Header ──────────────────────────────────────────────────────── -->
+    <HBox alignment="CENTER_LEFT">
+        <Label text="👤  Membership Management" styleClass="page-title"/>
+    </HBox>
+    <Label fx:id="membershipSubtitle"
+           text="Review and manage membership applications for your society."
+           styleClass="page-subtitle"/>
+
+    <!-- ── Tab Pane: Pending / Approved / Rejected ─────────────────────── -->
+    <TabPane fx:id="membershipTabPane" styleClass="auth-tab-pane" tabClosingPolicy="UNAVAILABLE">
+
+        <!-- PENDING TAB -->
+        <Tab text="⏳ Pending">
+            <VBox spacing="12">
+                <padding><Insets top="16" right="0" bottom="8" left="0"/></padding>
+
+                <TableView fx:id="pendingTable" styleClass="data-table" prefHeight="300">
+                    <columns>
+                        <TableColumn fx:id="colPendName"    text="Applicant Name" prefWidth="180"/>
+                        <TableColumn fx:id="colPendRoll"    text="Roll Number"    prefWidth="120"/>
+                        <TableColumn fx:id="colPendSociety" text="Society"        prefWidth="160"/>
+                        <TableColumn fx:id="colPendDate"    text="Applied Date"   prefWidth="120"/>
+                    </columns>
+                    <placeholder><Label text="No pending applications." styleClass="table-placeholder"/></placeholder>
+                </TableView>
+
+                <!-- Detail + Action -->
+                <VBox fx:id="pendingActionPane" spacing="12" styleClass="form-card"
+                      visible="false" managed="false">
+                    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+
+                    <Label text="Application Details" styleClass="section-title"/>
+                    <HBox spacing="20">
+                        <VBox spacing="4">
+                            <Label text="Applicant" styleClass="detail-field-label"/>
+                            <Label fx:id="pendApplicantName" text="—" styleClass="detail-field-value"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="Roll No" styleClass="detail-field-label"/>
+                            <Label fx:id="pendApplicantRoll" text="—" styleClass="detail-field-value"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="Applied" styleClass="detail-field-label"/>
+                            <Label fx:id="pendAppliedDate" text="—" styleClass="detail-field-value"/>
+                        </VBox>
+                    </HBox>
+
+                    <Label text="Motivation Statement" styleClass="detail-field-label"/>
+                    <TextArea fx:id="pendMotivation" editable="false" wrapText="true"
+                              prefHeight="80" styleClass="detail-textarea"/>
+
+                    <!-- Rejection reason (hidden until Reject clicked) -->
+                    <VBox fx:id="rejectionReasonPane" spacing="6" visible="false" managed="false">
+                        <Label text="Rejection Reason (required)" styleClass="field-label"/>
+                        <TextField fx:id="rejectionReasonField"
+                                   promptText="Enter reason for rejection..."
+                                   styleClass="form-field"/>
+                        <Label fx:id="rejectErrorLabel" styleClass="error-label"/>
+                    </VBox>
+
+                    <HBox spacing="10">
+                        <Button text="✔ Approve" styleClass="btn-success"
+                                onAction="#handleApprove"/>
+                        <Button text="✘ Reject" styleClass="btn-danger"
+                                onAction="#handleRejectClick"/>
+                        <Button fx:id="confirmRejectBtn" text="Confirm Reject"
+                                styleClass="btn-danger" visible="false" managed="false"
+                                onAction="#handleConfirmReject"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </Tab>
+
+        <!-- APPROVED TAB -->
+        <Tab text="✅ Approved">
+            <VBox spacing="12">
+                <padding><Insets top="16" right="0" bottom="8" left="0"/></padding>
+                <TableView fx:id="approvedTable" styleClass="data-table" prefHeight="360">
+                    <columns>
+                        <TableColumn fx:id="colApprName"    text="Member Name"   prefWidth="180"/>
+                        <TableColumn fx:id="colApprRoll"    text="Roll Number"   prefWidth="120"/>
+                        <TableColumn fx:id="colApprSociety" text="Society"       prefWidth="160"/>
+                        <TableColumn fx:id="colApprDate"    text="Approved Date" prefWidth="120"/>
+                    </columns>
+                    <placeholder><Label text="No approved members." styleClass="table-placeholder"/></placeholder>
+                </TableView>
+            </VBox>
+        </Tab>
+
+        <!-- REJECTED TAB -->
+        <Tab text="❌ Rejected">
+            <VBox spacing="12">
+                <padding><Insets top="16" right="0" bottom="8" left="0"/></padding>
+                <TableView fx:id="rejectedTable" styleClass="data-table" prefHeight="360">
+                    <columns>
+                        <TableColumn fx:id="colRejName"    text="Applicant"      prefWidth="180"/>
+                        <TableColumn fx:id="colRejRoll"    text="Roll Number"    prefWidth="120"/>
+                        <TableColumn fx:id="colRejSociety" text="Society"        prefWidth="160"/>
+                        <TableColumn fx:id="colRejReason"  text="Reason"         prefWidth="200"/>
+                    </columns>
+                    <placeholder><Label text="No rejected applications." styleClass="table-placeholder"/></placeholder>
+                </TableView>
+            </VBox>
+        </Tab>
+
+    </TabPane>
+
+    <!-- Student view: My memberships -->
+    <VBox fx:id="myMembershipsPane" spacing="12" visible="false" managed="false">
+        <Label text="My Membership Applications" styleClass="section-title"/>
+        <TableView fx:id="myMembershipsTable" styleClass="data-table" prefHeight="260">
+            <columns>
+                <TableColumn fx:id="colMyMembSociety" text="Society"     prefWidth="180"/>
+                <TableColumn fx:id="colMyMembStatus"  text="Status"      prefWidth="120"/>
+                <TableColumn fx:id="colMyMembDate"    text="Applied Date" prefWidth="130"/>
+                <TableColumn fx:id="colMyMembReason"  text="Reason (if rejected)" prefWidth="220"/>
+            </columns>
+            <placeholder><Label text="You have no membership applications yet." styleClass="table-placeholder"/></placeholder>
+        </TableView>
+    </VBox>
+
+</VBox>
