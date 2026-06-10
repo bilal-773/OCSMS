@@ -340,3 +340,11 @@ java -jar target/ocsms-1.0.0.jar
 ---
 
 > **Developed for SDA coursework — FAST-NUCES Peshawar, 2025–2026**
+
+
+> ## Team Members
+
+| Name | GitHub |
+|--------|--------|
+| Muhammad Bilal | @bilal-773 |
+|Muhammad Muddasir | @Muddasir1808 |
